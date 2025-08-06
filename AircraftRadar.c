@@ -1,3 +1,4 @@
+//Written by Dylan Dansby, July 26th, 2025
 #include <stdio.h>
 
 //Function that calculates velocity
