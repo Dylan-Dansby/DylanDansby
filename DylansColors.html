@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DylansColors - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            background: #0a0a0a;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .color-wheel-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .color-segment {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            transform-origin: center;
+            animation: rotateWheel 20s linear infinite;
+        }
+
+        .segment-1 { background: conic-gradient(from 0deg, #ff0000, #ff8800, #ffff00, #88ff00, #00ff00, #00ff88, #00ffff, #0088ff, #0000ff, #8800ff, #ff00ff, #ff0088, #ff0000); }
+        .segment-2 { background: conic-gradient(from 30deg, #ff3333, #ffaa33, #ffff33, #aaff33, #33ff33, #33ffaa, #33ffff, #33aaff, #3333ff, #aa33ff, #ff33ff, #ff33aa, #ff3333); opacity: 0.7; animation-duration: 25s; animation-direction: reverse; }
+        .segment-3 { background: conic-gradient(from 60deg, #ff6666, #ffcc66, #ffff66, #ccff66, #66ff66, #66ffcc, #66ffff, #66ccff, #6666ff, #cc66ff, #ff66ff, #ff66cc, #ff6666); opacity: 0.5; animation-duration: 30s; }
+
+        @keyframes rotateWheel {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 400px;
+            max-width: 90vw;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            font-size: 2.5em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff0080, #8000ff, #0080ff, #00ff80, #ff8000);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            transform: scale(1.02);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #ff0080, #8000ff, #0080ff, #00ff80, #ff8000);
+            background-size: 300% 300%;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: gradientShift 4s ease-in-out infinite;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            animation-duration: 1.5s;
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .forgot-password a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .color-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(2px);
+            animation: floatOrb 8s ease-in-out infinite;
+        }
+
+        .orb1 { width: 80px; height: 80px; background: radial-gradient(circle, #ff0080, transparent); top: 10%; left: 10%; animation-delay: 0s; }
+        .orb2 { width: 60px; height: 60px; background: radial-gradient(circle, #8000ff, transparent); top: 70%; right: 15%; animation-delay: 2s; }
+        .orb3 { width: 100px; height: 100px; background: radial-gradient(circle, #0080ff, transparent); bottom: 20%; left: 20%; animation-delay: 4s; }
+        .orb4 { width: 70px; height: 70px; background: radial-gradient(circle, #00ff80, transparent); top: 30%; right: 25%; animation-delay: 6s; }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translateY(0px) scale(1); opacity: 0.6; }
+            25% { transform: translateY(-20px) scale(1.1); opacity: 0.8; }
+            50% { transform: translateY(-40px) scale(1.2); opacity: 1; }
+            75% { transform: translateY(-20px) scale(1.1); opacity: 0.8; }
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .signup-link p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 10px;
+        }
+
+        .signup-link a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff0080, #8000ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: all 0.3s ease;
+        }
+
+        .signup-link a:hover {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+            
+            .logo h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="color-wheel-bg">
+        <div class="color-segment segment-1"></div>
+        <div class="color-segment segment-2"></div>
+        <div class="color-segment segment-3"></div>
+    </div>
+
+    <div class="color-orbs">
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="orb orb3"></div>
+        <div class="orb orb4"></div>
+    </div>
+
+    <div class="login-container">
+        <div class="logo">
+            <h1>DylansColors</h1>
+        </div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="login">Username</label>
+                <input type="text" id="login" name="login" placeholder="Enter your username" required="" fdprocessedid="xjlw66">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required="" fdprocessedid="n80gf">
+            </div>
+            
+            <button type="submit" class="login-btn" fdprocessedid="onf46k">Sign In</button>
+        </form>
+
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            const login = document.getElementById("login").value;
+            const password = document.getElementById("password").value;
+            
+            // Show loading state
+            const loginBtn = document.querySelector('.login-btn');
+            loginBtn.textContent = 'Signing In...';
+            loginBtn.style.background = 'linear-gradient(45deg, #333, #666)';
+            
+            try {
+                const response = await fetch("LAMPAPI/Login.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ login, password })
+                });
+                const resultText = await response.text();
+                const result = JSON.parse(resultText);
+                
+                if(result.error) {
+                    alert("Login failed: " + result.error);
+                    // Reset button
+                    loginBtn.textContent = 'Sign In';
+                    loginBtn.style.background = 'linear-gradient(45deg, #ff0080, #8000ff, #0080ff, #00ff80, #ff8000)';
+                } else {
+                    // Successful login
+                    // Redirect to userpage.html with query parameters
+                    const userId = result.id;
+                    const username = result.firstName; // or full name
+                    window.location.href = `userpage.html?user=${encodeURIComponent(username)}&id=${userId}`;
+                }
+            } catch (error) {
+                alert("Connection error. Please try again.");
+                // Reset button
+                loginBtn.textContent = 'Sign In';
+                loginBtn.style.background = 'linear-gradient(45deg, #ff0080, #8000ff, #0080ff, #00ff80, #ff8000)';
+            }
+        });
+
+        // Add some interactive sparkle effects on click
+        document.addEventListener('click', function(e) {
+            createSparkle(e.clientX, e.clientY);
+        });
+
+        function createSparkle(x, y) {
+            const sparkle = document.createElement('div');
+            sparkle.style.position = 'fixed';
+            sparkle.style.left = x + 'px';
+            sparkle.style.top = y + 'px';
+            sparkle.style.width = '10px';
+            sparkle.style.height = '10px';
+            sparkle.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
+            sparkle.style.borderRadius = '50%';
+            sparkle.style.pointerEvents = 'none';
+            sparkle.style.zIndex = '1000';
+            sparkle.style.animation = 'sparkle 1s ease-out forwards';
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes sparkle {
+                    0% { transform: scale(0) rotate(0deg); opacity: 1; }
+                    100% { transform: scale(1.5) rotate(180deg); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(sparkle);
+            
+            setTimeout(() => {
+                document.body.removeChild(sparkle);
+                document.head.removeChild(style);
+            }, 1000);
+        }
+    </script>
+
+
+<div id="hl-aria-live-message-container" aria-live="polite" class="visually-hidden"></div>
+<div id="hl-aria-live-alert-container" role="alert" aria-live="assertive" class="visually-hidden"></div><span id="PING_IFRAME_FORM_DETECTION" style="display: none;"></span>
+</body>
+</html>
