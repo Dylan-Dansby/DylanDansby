@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en"><head>
   <meta charset="UTF-8">
   <title>User Colors</title>
@@ -166,8 +167,8 @@
     <div class="form-section">
       <h3>Add a Color</h3>
       <form id="addColorForm">
-        <input type="text" id="colorInput" placeholder="Enter color name or hex code" required="" fdprocessedid="br7hx">
-        <button type="submit" fdprocessedid="zp64xv">Add Color</button>
+        <input type="text" id="colorInput" placeholder="Enter color name or hex code" required>
+        <button type="submit">Add Color</button>
       </form>
       <div class="error-message" id="addErrorMessage"></div>
     </div>
@@ -176,8 +177,8 @@
     <div class="form-section">
       <h3>Search Colors</h3>
       <form id="searchColorForm">
-        <input type="text" id="searchInput" placeholder="Search for a color" required="" fdprocessedid="7oo28">
-        <button type="submit" fdprocessedid="2hhb7g">Search</button>
+        <input type="text" id="searchInput" placeholder="Search for a color" required>
+        <button type="submit">Search</button>
       </form>
       <div class="error-message" id="searchErrorMessage"></div>
     </div>
@@ -193,7 +194,7 @@
     <!-- Display all colors -->
     <div class="all-colors-section">
       <h3>My Colors</h3>
-      <button class="load-all-btn" onclick="loadAllColors()" fdprocessedid="b25hkj">Load All My Colors</button>
+      <button class="load-all-btn" onclick="loadAllColors()">Load All My Colors</button>
       <div id="allColorsContainer"></div>
     </div>
   </div>
@@ -352,7 +353,7 @@
       }
     });
 
-    // Search Colors
+    // Search Colors - FIXED VERSION
     document.getElementById("searchColorForm").addEventListener("submit", async function(e){
       e.preventDefault();
       const search = document.getElementById("searchInput").value.trim();
@@ -370,7 +371,6 @@
         
         if(result.error && result.error !== "") {
           showError("searchErrorMessage", "Error: " + result.error);
-          changeBackground('black', 'Black');
           document.getElementById("currentColorDisplay").innerHTML = '<p style="color: rgba(255, 255, 255, 0.6);">Color not found</p>';
         } else if(result.results && result.results.length > 0) {
           // Look for the exact color that was searched for
@@ -383,19 +383,16 @@
             displayCurrentColor(searchedColor, searchedColor);
             document.getElementById("searchInput").value = "";
           } else {
-            // If exact match not found, use the first result (partial match)
-            const foundColor = result.results[0];
-            displayCurrentColor(foundColor, foundColor);
-            document.getElementById("searchInput").value = "";
+            // No exact match found - show error instead of using first result
+            showError("searchErrorMessage", "Color not found");
+            document.getElementById("currentColorDisplay").innerHTML = '<p style="color: rgba(255, 255, 255, 0.6);">Color not found</p>';
           }
         } else {
           showError("searchErrorMessage", "Color not found");
-          changeBackground('black', 'Black');
           document.getElementById("currentColorDisplay").innerHTML = '<p style="color: rgba(255, 255, 255, 0.6);">Color not found</p>';
         }
       } catch (error) {
         showError("searchErrorMessage", "Unexpected response from server");
-        changeBackground('black', 'Black');
       }
     });
 
@@ -424,8 +421,5 @@
     changeBackground('black', 'Black');
   </script>
 
-
-    <div id="hl-aria-live-message-container" aria-live="polite" class="visually-hidden"></div>
-    <div id="hl-aria-live-alert-container" role="alert" aria-live="assertive" class="visually-hidden"></div><span id="PING_IFRAME_FORM_DETECTION" style="display: none;"></span>
   </body>
 </html>
