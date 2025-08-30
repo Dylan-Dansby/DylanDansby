@@ -1,2 +1,2 @@
 # DylanDansby
-Personal Github Page
+Github Page for personal passion projects
