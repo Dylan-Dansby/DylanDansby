@@ -1,0 +1,431 @@
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <title>User Colors</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      transition: background-color 0.5s ease;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    h2, h3 {
+      text-align: center;
+    }
+    
+    .form-section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      backdrop-filter: blur(10px);
+    }
+    
+    form {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    input {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      min-width: 200px;
+    }
+    
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background: linear-gradient(45deg, #ff0080, #8000ff);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .error-message {
+      color: red;
+      text-align: center;
+      font-weight: bold;
+      margin: 10px 0;
+      padding: 10px;
+      background: rgba(255, 0, 0, 0.1);
+      border-radius: 5px;
+      border: 1px solid rgba(255, 0, 0, 0.3);
+      display: none;
+    }
+    
+    .colors-table {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px 0;
+      backdrop-filter: blur(10px);
+    }
+    
+    .color-display {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      align-items: center;
+      min-height: 120px;
+    }
+    
+    .color-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .color-box {
+      width: 80px;
+      height: 80px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+    
+    .color-box:hover {
+      transform: scale(1.1);
+      border-color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .color-name {
+      color: white;
+      font-size: 12px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 4px 8px;
+      border-radius: 4px;
+      max-width: 80px;
+      word-wrap: break-word;
+    }
+    
+    .all-colors-section {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    #allColorsContainer {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .load-all-btn {
+      display: block;
+      margin: 20px auto;
+      background: linear-gradient(45deg, #00ff80, #0080ff);
+    }
+    
+    .current-color-info {
+      text-align: center;
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+    }
+  </style>
+</head>
+<body style="background-color: black;">
+  <div class="container">
+    <h2>Welcome, <span id="usernameDisplay">Rick</span></h2>
+    
+    <div class="current-color-info">
+      <p>Current background: <span id="currentColorName">Black</span></p>
+    </div>
+    
+    <!-- Add Color -->
+    <div class="form-section">
+      <h3>Add a Color</h3>
+      <form id="addColorForm">
+        <input type="text" id="colorInput" placeholder="Enter color name or hex code" required="" fdprocessedid="br7hx">
+        <button type="submit" fdprocessedid="zp64xv">Add Color</button>
+      </form>
+      <div class="error-message" id="addErrorMessage"></div>
+    </div>
+    
+    <!-- Search Color -->
+    <div class="form-section">
+      <h3>Search Colors</h3>
+      <form id="searchColorForm">
+        <input type="text" id="searchInput" placeholder="Search for a color" required="" fdprocessedid="7oo28">
+        <button type="submit" fdprocessedid="2hhb7g">Search</button>
+      </form>
+      <div class="error-message" id="searchErrorMessage"></div>
+    </div>
+    
+    <!-- Display searched/added color -->
+    <div class="colors-table">
+      <h3>Current Color</h3>
+      <div class="color-display" id="currentColorDisplay">
+        <p style="color: rgba(255, 255, 255, 0.6);">Search or add a color to see it here</p>
+      </div>
+    </div>
+    
+    <!-- Display all colors -->
+    <div class="all-colors-section">
+      <h3>My Colors</h3>
+      <button class="load-all-btn" onclick="loadAllColors()" fdprocessedid="b25hkj">Load All My Colors</button>
+      <div id="allColorsContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    // Get user info from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get('user') || "Guest";
+    const userId = parseInt(urlParams.get('id')) || 0;
+    document.getElementById('usernameDisplay').textContent = username;
+
+    let currentBackgroundColor = 'black';
+
+    // Color mapping for database names to CSS colors
+    const colorMap = {
+      // Standard colors (these work as-is)
+      'blue': 'blue',
+      'white': 'white',
+      'black': 'black',
+      'gray': 'gray',
+      'grey': 'gray',
+      'magenta': 'magenta',
+      'yellow': 'yellow',
+      'cyan': 'cyan',
+      'lime': 'lime',
+      'brown': 'brown',
+      'red': 'red',
+      
+      // Uncommon colors that need mapping
+      'salmon': '#FA8072',
+      'chartreuse': '#7FFF00',
+      'light blue': '#ADD8E6',
+      'light gray': '#D3D3D3',
+      'light grey': '#D3D3D3',
+      'light red': '#FFB6C1',
+      'light green': '#90EE90',
+      'chiffon': '#FFFACD',
+      'fuscia': '#FF00FF',
+      'fuchsia': '#FF00FF',
+      'beige': '#F5F5DC'
+    };
+
+    // Function to get valid CSS color
+    function getValidColor(colorName) {
+      const lowerName = colorName.toLowerCase().trim();
+      return colorMap[lowerName] || colorName;
+    }
+
+    // Function to change background color
+    function changeBackground(color, colorName) {
+      document.body.style.backgroundColor = color;
+      currentBackgroundColor = color;
+      document.getElementById('currentColorName').textContent = colorName || color;
+    }
+
+    // Function to show error message
+    function showError(elementId, message) {
+      const errorElement = document.getElementById(elementId);
+      errorElement.textContent = message;
+      errorElement.style.display = 'block';
+      setTimeout(() => {
+        errorElement.style.display = 'none';
+      }, 5000);
+    }
+
+    // Function to display a single color in the current color display
+    function displayCurrentColor(colorName, displayName) {
+      const container = document.getElementById("currentColorDisplay");
+      container.innerHTML = "";
+      
+      const validColor = getValidColor(colorName);
+      
+      const colorItem = document.createElement("div");
+      colorItem.className = "color-item";
+      
+      const colorBox = document.createElement("div");
+      colorBox.className = "color-box";
+      colorBox.style.backgroundColor = validColor;
+      
+      const colorNameDiv = document.createElement("div");
+      colorNameDiv.className = "color-name";
+      colorNameDiv.textContent = displayName || colorName;
+      
+      colorItem.appendChild(colorBox);
+      colorItem.appendChild(colorNameDiv);
+      container.appendChild(colorItem);
+      
+      // Change background to this color
+      changeBackground(validColor, displayName || colorName);
+    }
+
+    // Function to display all colors
+    function displayAllColors(colors) {
+      const container = document.getElementById("allColorsContainer");
+      container.innerHTML = "";
+      
+      if (!colors || colors.length === 0) {
+        container.innerHTML = '<p style="color: rgba(255, 255, 255, 0.6); text-align: center;">No colors found</p>';
+        return;
+      }
+      
+      colors.forEach(colorName => {
+        const validColor = getValidColor(colorName);
+        
+        const colorItem = document.createElement("div");
+        colorItem.className = "color-item";
+        colorItem.style.cursor = "pointer";
+        
+        const colorBox = document.createElement("div");
+        colorBox.className = "color-box";
+        colorBox.style.backgroundColor = validColor;
+        
+        const colorNameDiv = document.createElement("div");
+        colorNameDiv.className = "color-name";
+        colorNameDiv.textContent = colorName;
+        
+        // Click to set as background
+        colorItem.onclick = () => {
+          displayCurrentColor(colorName, colorName);
+        };
+        
+        colorItem.appendChild(colorBox);
+        colorItem.appendChild(colorNameDiv);
+        container.appendChild(colorItem);
+      });
+    }
+
+    // Add Color
+    document.getElementById("addColorForm").addEventListener("submit", async function(e){
+      e.preventDefault();
+      const color = document.getElementById("colorInput").value.trim();
+      
+      if (!color) return;
+      
+      try {
+        const response = await fetch("LAMPAPI/AddColor.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId, color })
+        });
+        const resultText = await response.text();
+        const result = JSON.parse(resultText);
+        
+        if(result.error) {
+          showError("addErrorMessage", "Error: " + result.error);
+          changeBackground('black', 'Black');
+          document.getElementById("currentColorDisplay").innerHTML = '<p style="color: rgba(255, 255, 255, 0.6);">Color could not be added</p>';
+        } else {
+          // Successfully added, display the color
+          displayCurrentColor(color, color);
+          document.getElementById("colorInput").value = "";
+        }
+      } catch (error) {
+        showError("addErrorMessage", "Unexpected response from server");
+        changeBackground('black', 'Black');
+      }
+    });
+
+    // Search Colors
+    document.getElementById("searchColorForm").addEventListener("submit", async function(e){
+      e.preventDefault();
+      const search = document.getElementById("searchInput").value.trim();
+      
+      if (!search) return;
+      
+      try {
+        const response = await fetch("LAMPAPI/SearchColors.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId, color: search })
+        });
+        const resultText = await response.text();
+        const result = JSON.parse(resultText);
+        
+        if(result.error && result.error !== "") {
+          showError("searchErrorMessage", "Error: " + result.error);
+          changeBackground('black', 'Black');
+          document.getElementById("currentColorDisplay").innerHTML = '<p style="color: rgba(255, 255, 255, 0.6);">Color not found</p>';
+        } else if(result.results && result.results.length > 0) {
+          // Look for the exact color that was searched for
+          const searchedColor = result.results.find(color => 
+            color.toLowerCase().trim() === search.toLowerCase().trim()
+          );
+          
+          if (searchedColor) {
+            // Found the exact color, display it
+            displayCurrentColor(searchedColor, searchedColor);
+            document.getElementById("searchInput").value = "";
+          } else {
+            // If exact match not found, use the first result (partial match)
+            const foundColor = result.results[0];
+            displayCurrentColor(foundColor, foundColor);
+            document.getElementById("searchInput").value = "";
+          }
+        } else {
+          showError("searchErrorMessage", "Color not found");
+          changeBackground('black', 'Black');
+          document.getElementById("currentColorDisplay").innerHTML = '<p style="color: rgba(255, 255, 255, 0.6);">Color not found</p>';
+        }
+      } catch (error) {
+        showError("searchErrorMessage", "Unexpected response from server");
+        changeBackground('black', 'Black');
+      }
+    });
+
+    // Load all colors
+    async function loadAllColors() {
+      try {
+        const response = await fetch("LAMPAPI/SearchColors.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId, color: "" })
+        });
+        const resultText = await response.text();
+        const result = JSON.parse(resultText);
+        
+        if(result.error && result.error !== "") {
+          alert("Error: " + result.error);
+        } else if(result.results) {
+          displayAllColors(result.results);
+        }
+      } catch (error) {
+        alert("Unexpected response from server");
+      }
+    }
+
+    // Reset background to black on page load
+    changeBackground('black', 'Black');
+  </script>
+
+
+    <div id="hl-aria-live-message-container" aria-live="polite" class="visually-hidden"></div>
+    <div id="hl-aria-live-alert-container" role="alert" aria-live="assertive" class="visually-hidden"></div><span id="PING_IFRAME_FORM_DETECTION" style="display: none;"></span>
+  </body>
+</html>
