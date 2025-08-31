@@ -1,0 +1,10 @@
+Dylan D -> LineCounter.py README:
+
+  LineCounter.py takes only other python files as input
+
+  To input a desired file into LineCounter, the user must include the case 
+  sensitive Filename.py in the command line arguements.
+
+  LineCounter only accepts 2 arguements: LineCounter.py and Filename.py
+
+  LineCounter only returns the number of lines of detectable code in the python file.
